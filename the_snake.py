@@ -41,6 +41,12 @@ pg.display.set_caption('Змейка')
 # Настройка времени:
 clock = pg.time.Clock()
 
+# Счетчик
+WHITE = (255, 255, 255)
+FONT_SIZE = 24
+
+# Шрифт
+font = pg.font.Font(None, FONT_SIZE)
 
 # Тут опишите все классы игры.
 class GameObject:
@@ -137,6 +143,7 @@ class Snake(GameObject):
         self.positions = [(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)]
         self.direction = choice([UP, DOWN, LEFT, RIGHT])
         self.next_direction = None
+        self.last = None
 
 
 def handle_keys(game_object) -> None:
@@ -162,6 +169,14 @@ def main():
     snake = Snake()
     apple = Apple()
 
+    # Создайте текстовый объект
+    score = 0
+    score_text = font.render(f"Score: {score}", True, WHITE)
+
+    # Позиция текста
+    score_rect = score_text.get_rect(top=10,
+                                     centerx=SCREEN_WIDTH // 2)
+
     while True:
         clock.tick(SPEED)
         screen.fill(BOARD_BACKGROUND_COLOR)
@@ -182,8 +197,13 @@ def main():
             snake.length += 1
             apple.randomize_position()
 
+        score = snake.length
+        score_text = font.render(f"Score: {score}", True, WHITE)
+
         apple.draw()
         snake.draw()
+
+        screen.blit(score_text, score_rect)
 
         pg.display.update()
 
