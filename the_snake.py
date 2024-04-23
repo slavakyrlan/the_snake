@@ -48,6 +48,13 @@ FONT_SIZE = 24
 # Шрифт
 font = pg.font.Font(None, FONT_SIZE)
 
+# Клавиши
+TURNS = {(pg.K_UP, DOWN): UP,
+         (pg.K_DOWN, UP): DOWN,
+         (pg.K_LEFT, RIGHT): LEFT,
+         (pg.K_RIGHT, LEFT): RIGHT}
+
+
 # Тут опишите все классы игры.
 class GameObject:
     """Базовый класс, от которого наследуются другие"""
@@ -60,7 +67,8 @@ class GameObject:
         """Метод для отрисовки объекта на игровом поле"""
         raise NotImplementedError()
 
-    def draw_square(self, position, color):
+    @staticmethod
+    def draw_square(position: tuple, color: tuple) -> None:
         """Метод для отрисовки квадратов"""
         rect = pg.Rect(position, (GRID_SIZE, GRID_SIZE))
         pg.draw.rect(screen, color, rect)
@@ -148,12 +156,6 @@ class Snake(GameObject):
 
 def handle_keys(game_object) -> None:
     """Обрабатывает нажатия клавиш"""
-    TURNS = {
-        (pg.K_UP, DOWN): UP,
-        (pg.K_DOWN, UP): DOWN,
-        (pg.K_LEFT, RIGHT): LEFT,
-        (pg.K_RIGHT, LEFT): RIGHT,
-    }
     for event in pg.event.get():
         if event.type == pg.QUIT:
             pg.quit()
